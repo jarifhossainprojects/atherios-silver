@@ -12,23 +12,16 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '11'
-
-    - name: Download Flex SDK
+    - name: Install Haxe Compiler
       run: |
-        wget -q https://archive.apache.org/dist/flex/4.16.1/binaries/apache-flex-sdk-4.16.1-bin.tar.gz
-        tar -xzf apache-flex-sdk-4.16.1-bin.tar.gz
-        chmod +x apache-flex-sdk-4.16.1-bin/bin/mxmlc
+        sudo apt-get update
+        sudo apt-get install -y haxe
 
-    - name: Compile ActionScript to SWF
+    - name: Compile Haxe directly to SWF
       run: |
-        ./apache-flex-sdk-4.16.1-bin/bin/mxmlc Main.as -output atherios-silver.swf -static-link-runtime-shared-libraries=true
+        haxe -main Main -swf atherios-silver.swf -swf-header 800:600:60:ffffff
 
-    - name: Upload SWF File
+    - name: Upload SWF File Artifact
       uses: actions/upload-artifact@v4
       with:
         name: atherios-silver-swf
