@@ -1,0 +1,36 @@
+name: Build Flash SWF
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '11'
+
+    - name: Install Apache Flex SDK (ActionScript Compiler)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y flex
+        wget https://archive.apache.org/dist/flex/4.16.1/binaries/apache-flex-sdk-4.16.1-bin.tar.gz
+        tar -xzf apache-flex-sdk-4.16.1-bin.tar.gz
+
+    - name: Compile ActionScript to SWF
+      run: |
+        ./apache-flex-sdk-4.16.1-bin/bin/mxmlc Main.as -output atherios-silver.swf -static-link-runtime-shared-libraries=true
+
+    - name: Upload SWF File Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: atherios-silver-swf
+        path: atherios-silver.swf
