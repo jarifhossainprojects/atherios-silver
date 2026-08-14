@@ -7,27 +7,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: codekaizen/apache-flex-sdk:latest
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v4
-
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'zulu'
-        java-version: '8'
-
-    - name: Download Standalone Compiler
-      run: |
-        wget https://github.com/bowlerhat/actionscript-compiler-action/releases/download/v1.0.0/mxmlc.jar -O mxmlc.jar
+      uses: actions/checkout@v3
 
     - name: Compile ActionScript to SWF
       run: |
-        java -jar mxmlc.jar Main.as -output atherios-silver.swf
+        mxmlc Main.as -output atherios-silver.swf -static-link-runtime-shared-libraries=true
 
-    - name: Upload SWF File
-      uses: actions/upload-artifact@v4
+    - name: Upload SWF File Artifact
+      uses: actions/upload-artifact@v3
       with:
         name: atherios-silver-swf
         path: atherios-silver.swf
