@@ -3,7 +3,6 @@ name: Hax SWF Compiler
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch:
 
 jobs:
   build:
@@ -11,27 +10,27 @@ jobs:
 
     steps:
       - name: Checkout Repository Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Setup Haxe Engine
-        uses: kxck/setup-haxe@v1
+        uses: kamilkf/setup-haxe@v1
         with:
           haxe-version: 4.3.1
 
       - name: Install Haxe Dependencies
         run: |
-          haxelib install lime --silent
-          haxelib install openfl --silent
-          haxelib install flixel --silent
-          haxelib install flixel-addons --silent
+          haxelib install lime
+          haxelib install openfl
+          haxelib install flixel
+          haxelib install flixel-addons
           haxelib run lime setup
 
-      - name: Clean & Build Flash SWF
+      - name: Build Flash SWF
         run: |
-          haxelib run lime build flash -clean
+          haxelib run lime build flash
 
       - name: Upload atherios-silver.swf
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: atherios-silver-swf
           path: export/flash/bin/atherios-silver.swf
