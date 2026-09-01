@@ -1,0 +1,3 @@
+# Atherios Admin Permissions List (Add usernames here)
+Jarif
+AdminPlayer
