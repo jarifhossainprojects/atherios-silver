@@ -12,18 +12,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Haxe
-        uses: asannou/setup-haxe@v1
-        with:
-          haxe-version: 4.3.1
-
-      - name: Install Libraries
+      - name: Install Haxe & Neko
         run: |
+          sudo apt-get update
+          sudo apt-get install -y haxe neko
+
+      - name: Install Libraries & Setup
+        run: |
+          mkdir -p ~/haxelib && haxelib setup ~/haxelib
           haxelib install lime
           haxelib install openfl
           haxelib install flixel
           haxelib install flixel-addons
-          haxelib run lime setup
+          haxelib run lime setup -y
 
       - name: Build Flash SWF
         run: |
